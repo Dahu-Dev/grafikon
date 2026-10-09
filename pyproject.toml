@@ -1,17 +1,20 @@
 [project]
-name = "slacker_viz"
+name = "grafikon"
 version = "0.1.0"
-description = "TBC"
-authors = [{name="Squiggel", email="your.email.is.forwarded.no.reply@gmail.com"}]
+description = "An easier, interactive, way to draw and manage surveys of large cave systems."
+authors = [{name="Dahu", email="your.email.is.forwarded.no.reply@gmail.com"}]
 readme = "README.md"
-dependencies = ["pandas"]
+dependencies = [
+    "pyside6",
+    "PyOpenGL",
+    "PyOpenGL_accelerate",
+    "numpy",
+    "pandas",
+]
 
 [build-system]
 requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
-[tool.setuptools]
-packages = ["slacker_viz"]
-
 [project.urls]
-Homepage = "https://github.com/Squiggel/slacker-viz"
+Homepage = "https://github.com/Dahu-Dev/grafikon"
