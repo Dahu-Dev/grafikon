@@ -29,11 +29,19 @@ class Attribute(BaseModel):
 
 class Layer(BaseModel):
     label: str
-    id: UUID = Field(default_factory=uuid4)
+    parent: Optional[UUID|str] = None
+    children: list[UUID|str] = Field(default_factory=list)
+    id: UUID|str = Field(default_factory=uuid4)
+
+    @model_validator(mode="after")
+    def check_if_root(self) -> "Layer":
+        if self.parent == None and self.label != self.id and self.id != "0":
+            raise ValueError("Only the root node can have no parent")
+        return self
 
 class Entity(BaseModel):
     layer: Layer
-    attributeValues: Optional[dict[str, Attribute]] = Field(default_factory=dict)
+    attributeValues: dict[str, Attribute] = Field(default_factory=dict)
     id: UUID = Field(default_factory=uuid4)
 
 class Coordinate(BaseModel):
@@ -55,8 +63,8 @@ class Coordinate(BaseModel):
 
 class Point(Entity):
     coordinate: Coordinate
-    pointStyle: Optional[str] = "dot"
-    pointStyles = ClassVar[tuple[str]] = ("dot")
+    pointStyle: str = "dot"
+    pointStyles: ClassVar[tuple[str]] = ("dot",)
 
     @field_validator("pointStyle", mode="after")
     @classmethod
