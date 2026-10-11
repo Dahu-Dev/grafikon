@@ -40,7 +40,7 @@ class Layer(BaseModel):
         return self
 
 class Entity(BaseModel):
-    layer: Layer
+    layer: UUID|str
     attributeValues: dict[str, Attribute] = Field(default_factory=dict)
     id: UUID = Field(default_factory=uuid4)
 
@@ -84,3 +84,10 @@ class Polyline(Entity):
         if len(points) < 2:
             raise ValueError("A polyline must have 2 or more points.")
         return points
+
+    @model_validator(mode="after")
+    def check_(self) -> "Polyline":
+        for point in self.points:
+            if point.layer != self.layer:
+                raise ValueError("Layer of a polyline must be the same as all its points")
+        return self
